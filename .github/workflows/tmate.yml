@@ -1,0 +1,13 @@
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build project
+        run: echo "Bangun project lo bro..."
+      
+      # Aktifin tmate kalau DEBUG_MODE == true
+      - name: Setup tmate (debug mode)
+        if: ${{ env.DEBUG_MODE == 'true' }}
+        uses: mxschmitt/action-tmate@v3
