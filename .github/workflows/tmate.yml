@@ -1,4 +1,4 @@
-name: Tmate Debug Fixed
+name: Debug pakai sshx.io + kirim Discord
 
 on:
   workflow_dispatch:
@@ -9,15 +9,27 @@ jobs:
     timeout-minutes: 360
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Test connection to tmate.io
-        run: ping -c 3 tmate.io || echo "Ping failed, tapi lanjut coba"
+      - name: Install sshx
+        run: curl -fsSL https://sshx.io/get | sh
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: false
+      - name: Start sshx session
+        id: sshx
+        run: |
+          echo "🔥 Membuat session sshx..."
+          URL=$(sshx --share | grep -Eo 'https://sshx.io/[a-zA-Z0-9]+')
+          echo "🔗 SSHX URL: $URL"
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      - name: Kirim link ke Discord
+        if: ${{ steps.sshx.outputs.url != '' }}
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d "{\"content\": \"🖥️ **SSHX Session Aktif!**\n${{ steps.sshx.outputs.url }}\"}" \
+               ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Keep alive
         run: sleep infinity
