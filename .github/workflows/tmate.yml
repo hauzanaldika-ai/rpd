@@ -19,7 +19,7 @@ jobs:
         id: sshx
         run: |
           echo "🔥 Membuat session sshx..."
-          URL=$(sshx --share | grep -Eo 'https://sshx.io/[a-zA-Z0-9]+')
+          URL=$(sshx | grep -Eo 'https://sshx.io/[a-zA-Z0-9]+')
           echo "🔗 SSHX URL: $URL"
           echo "url=$URL" >> $GITHUB_OUTPUT
 
