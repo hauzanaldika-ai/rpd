@@ -1,4 +1,4 @@
-name: Debug pakai tmate
+name: Tmate Debug Fixed
 
 on:
   workflow_dispatch:
@@ -9,10 +9,15 @@ jobs:
     timeout-minutes: 360
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Test connection to tmate.io
+        run: ping -c 3 tmate.io || echo "Ping failed, tapi lanjut coba"
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
         with:
-          limit-access-to-actor: false  # biar cuma lo (yang jalanin workflow) yang bisa akses
+          limit-access-to-actor: false
+
+      - name: Keep alive
+        run: sleep infinity
